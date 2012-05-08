@@ -18,7 +18,7 @@
                 append($container, data);
 
                 $container.jmpress();
-                $container.css("top", "30%");
+                $container.css("top", "40%");
 
                 $('pre code').each(function(i, e) {hljs.highlightBlock(e, '    ')});
             }
