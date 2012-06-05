@@ -29,8 +29,8 @@
 (dbg "1.1.4  Compound Procedures")
 
 (define (square x)
-    (dbg "square")
-    (dbg x)
+    ; (dbg "square")
+    ; (dbg x)
     (* x x)
 )
 
@@ -201,3 +201,227 @@
 (dbg
     (max-sum 1 3 2)
 )
+
+(dbg "exercise 1.4")
+
+(define (a-plus-abs-b a b)
+    ((if (> b 0) + -) a b)
+)
+
+(dbg
+    (a-plus-abs-b 3 -5)
+)
+
+(dbg "exercise 1.5")
+
+(define (p) (p)
+)
+
+(define (test x y)
+    (if (= x 0)
+        0
+        y
+    )
+)
+
+; (dbg 
+;     (test 0 (p))
+; )
+
+(dbg "1.1.7  Example: Square Roots by Newton's Method")
+
+(define (good-enough? guess x)
+    (<
+        (my-abs-1
+            (-
+                (square guess)
+                x
+            )
+        )
+        0.001
+    )
+)
+
+(define (improve guess x)
+    (average guess (/ x guess))
+)
+
+(define (average x y)
+    (/ (+ x y) 2)
+)
+
+(define (sqrt-iter guess x)
+    (if
+        (good-enough? guess x)
+        guess
+        (sqrt-iter
+            (improve guess x)
+            x
+        )
+    )
+)
+
+(define (sqrt x)
+    (sqrt-iter 1.0 x)
+)
+
+(dbg (sqrt 9))
+
+(dbg "exercise 1.6")
+
+(define (new-if predicate then-clause else-clause)
+    (cond (predicate then-clause)
+        (else else-clause)
+    )
+)
+
+; (define (sqrt-iter guess x)
+;     (new-if
+;         (good-enough? guess x)
+;         guess
+;         (sqrt-iter
+;             (improve guess x)
+;             x
+;         )
+;     )
+; )
+; (dbg (sqrt 100))
+
+(dbg "exercise 1.7")
+(dbg (sqrt (square 0.001)))
+(dbg (sqrt (square 10000)))
+
+(define (good-enough? guess x)
+    (<
+        (my-abs-1
+            (/
+                (-
+                    (square guess)
+                    x
+                )
+                x
+            )
+        )
+        0000.1
+    )
+)
+
+(dbg (sqrt (square 0.001)))
+(dbg (sqrt (square 10000)))
+
+(dbg "exercise 1.8")
+
+(define (good-enough-3? guess x)
+    (<
+        (my-abs-1
+            (/
+                (-
+                    (* guess guess guess)
+                    x
+                )
+                x
+            )
+        )
+        0000.1
+    )
+)
+
+(define (improve3 guess x)
+    (/ (+ (/ x (square guess))(* 2 guess)) 3)
+)
+
+(define (sqrt3-iter guess x)
+    (if
+        (good-enough-3? guess x)
+        guess
+        (sqrt3-iter
+            (improve3 guess x)
+            x
+        )
+    )
+)
+
+(define (sqrt3 x)
+    (sqrt3-iter 1.0 x)
+)
+
+(dbg (sqrt3 8))
+
+(dbg "1.1.8  Procedures as Black-Box Abstractions")
+
+(define (sqrt x)
+    
+    (define (good-enough? guess)
+        (< (abs (- (square guess) x)) 0.001)
+    )
+
+    (define (improve guess)
+        (average guess (/ x guess))
+    )
+
+    (define (sqrt-iter guess)
+        (if (good-enough? guess)
+            guess
+            (sqrt-iter (improve guess))
+        )
+    )
+
+    (sqrt-iter 1.0)
+)
+
+(dbg (sqrt 100))
+
+(dbg "1.2  Procedures and the Processes They Generate")
+
+(dbg "1.2.1  Linear Recursion and Iteration")
+
+(define (factorial n)
+    (fact-iter 1 1 n)
+)
+
+(define (fact-iter product counter max-count)
+    (if (> counter max-count)
+        product
+        (fact-iter 
+            (* counter product)
+            (+ counter 1)
+            max-count
+        )
+    )
+)
+(dbg (factorial 6))
+
+(dbg "exercise 1.9")
+
+(define (dec x)
+    (dbg "dec")
+    (dbg x)
+    (- x 1)
+)
+(define (inc x)
+    (dbg "inc")
+    (dbg x)
+    (+ x 1)
+)
+
+(define (add-1 a b)
+    (dbg (list "add-1" a b))
+    (if (= a 0)
+        b
+        (inc (add-1 (dec a ) b))
+    )
+)
+
+(dbg (add-1 4 5))
+
+(define (add-2 a b)
+    (dbg (list "add-2" a b))
+    (if (= a 0)
+        b
+        (add-2 (dec a) (inc b))
+    )
+)
+
+(dbg (add-2 4 5))
+
+(dbg "exercise 1.10")
